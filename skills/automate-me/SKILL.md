@@ -69,7 +69,7 @@ Author the `SKILL.md` file directly. Placement:
 - Handle: the user's first name or chosen identifier.
 - Frontmatter `description`: trigger on their name + `/<handle>-mode` + "work in their style", not on generic keywords like "write code" or "review PR".
 - Frontmatter formatting: standard SKILL.md YAML. Keep `description` as one YAML scalar. Quote it or use `description: >-` with indented continuation lines when punctuation or wrapping requires it.
-- Frontmatter `disable-model-invocation: true` by default. Opt out only if the user explicitly wants their mode to apply on every turn.
+- Do NOT set `disable-model-invocation` — on Devin it makes the skill unreachable (the model can't auto-load it and it can't be invoked by name either). Scope it through `description` triggers instead (their name + `/<handle>-mode`), so it activates on request without firing on every turn.
 
 ### 5. Iterate on prose
 
