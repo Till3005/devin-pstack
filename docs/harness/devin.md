@@ -44,3 +44,17 @@ Tell Devin in any session: **"install the plugin from `github.com/Till3005/devin
 |---|---|
 | Babysit a PR | `git_take_over_pr` + `git_pr_checks` for live CI/comment wakeups. |
 | Verifier driving the app | `control-ui` / `control-cli` skills, or hand off to Devin's testing agent for recorded proof. |
+
+## Where Devin exceeds Cursor for pstack
+
+Native advantages worth leaning on:
+
+- **True VM isolation per subagent** — each `devin_session_create` child gets its own machine and checkout; no shared-worktree hazards, no cross-lane file races.
+- **Cross-platform fan-out** — the `fleet` playbook verifies a change on `windows`/macOS/linux children in one fan-out; Cursor cloud agents have no platform axis.
+- **Live PR wakeups, no polling** — `git_take_over_pr` streams comments, CI changes, and pushes into the session; `git_pr_checks` waits in-turn. Replaces Cursor's `watch-pr` script polling under `/loop`.
+- **Devin Review triage loop** — `devin_review_manage` verdicts post to the PR via `end_triage`; a structured upgrade over Bugbot comment scraping.
+- **Dynamic workflows** — `run_workflow` scripts fan out ≥5 lanes with journals and resume; survived restarts out of the box.
+- **Durable automations** — `devin_automation_manage` triggers on schedule/webhook/Slack/GitHub/Linear/Jira with human approval cards; benny ports onto this directly.
+- **Environment snapshots + blueprint testing** — `devin_blueprint_test` verifies setup in a clean VM; `update_environment_config` persists it.
+- **Session search and insights** — `devin_session_search`/`devin_session_insights` find and analyze prior runs; richer than transcript globbing.
+- **Boards, billing tags, oncall** — Devin Boards claim tickets for child sessions; billing tags attribute cost; oncall responders triage Slack/PagerDuty.

@@ -17,7 +17,7 @@ The Principles section below grounds every trigger. In your reply, name each pri
 The remaining triggers live only here:
 
 - First message → restate the user's goal and the smallest change that meets it, then proceed. Open each subagent brief, PR `## Why`, and final report with the goal.
-- Starting any agent, whether a Task subagent or a Project worker → the first line of its kickoff is `Read <path>/worker.md before anything else.`, with `<path>` the absolute path of this skill's folder. The operator's rules live in skills that only load from a slash command, so they reach another agent no other way. Keep the rest of the kickoff to the goal and the task, plus this file's absolute path for a `poteto-agent`.
+- Starting any agent, whether a Devin child session or a same-VM subagent → the first line of its kickoff is `Read <path>/worker.md before anything else.`, with `<path>` the absolute path of this skill's folder. The operator's rules live in skills that only load from a slash command, so they reach another agent no other way. Keep the rest of the kickoff to the goal and the task, plus this file's absolute path for a `poteto-agent` child.
 - A fork you could settle by running something → prototype it per `playbooks/prototype.md` instead of asking.
 - Code → name the data shape first. Across a function boundary → **architect**. Fan-out → **swarm**. Bakeoff → **arena**. Contested design → **interrogate**.
 - Prose, your reply included → **unslop**. Docs, PR descriptions, commit messages → **technical-writing**.
@@ -83,21 +83,25 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 
 ## Subagents
 
-**Use `subagent_type: "poteto-agent"` for any subagent you spawn directly inside a playbook step.** The chat that receives `/poteto-mode` runs the playbook itself. Routed workflow skills (`interrogate`, `swarm`) set their own `subagent_type`. Respect it.
+**A pstack subagent is a Devin child session spawned with `devin_session_create`.** Each child gets its own VM, its own checkout, and its own context — true isolation, not a shared workspace, so **separate-before-serializing-shared-state** holds at the platform level. For a helper that must share this machine's checkout or processes, use `run_subagent` instead and say so. The chat that receives `/poteto-mode` runs the playbook itself; routed workflow skills (`interrogate`, `swarm`) set their own child shape. Respect it.
 
-**Defaults for every `Task` call.** `run_in_background: true`, agent mode (readonly strips MCP), file pointers not inlined context, and an explicit model per role, Project workers included. `/setup-pstack` writes `~/.devin/rules/pstack-models.mdc`, whose per-role lines override the defaults below and the role models in the routed skills (`arena`, `swarm`, `interrogate`). A role with no line keeps its default. A line of `inherit-parent` or `auto` runs the role on the parent model, so omit `model` and spawn `generalPurpose`, because `poteto-agent` defaults to Opus 5.5. Each code playbook reads its own line (`feature, refactoring`, `bug-fix`, `perf-issue`, or `hillclimb`), prose and judgment read `judgment and prose`, and trivial mechanical edits read `swarm workers`. If the rule has no `# defaults: 3` line, an older setup wrote it. Keep honoring its lines, and tell the user once per session to rerun `/setup-pstack`.
+**Defaults for every child.** `notify_on_response: true` so you are woken on completion, `title` naming the role, file pointers not inlined context, and an explicit `devin_mode` per role — batch-level, never inside a session spec. Spawn the whole batch in one `devin_session_create` call. For five or more judgment units or a staged pipeline, prefer a dynamic workflow (`run_workflow`; invoke the `dynamic-workflows` skill first) — deterministic orchestration with resume that has no equivalent in other harnesses. `/setup-pstack` writes `~/.devin/rules/pstack-models.mdc`, whose per-role lines override the defaults below and the role modes in the routed skills (`arena`, `swarm`, `interrogate`). A role with no line keeps its default. A line of `inherit-parent` or `auto` runs the role on the parent's agent mode, so omit `devin_mode`. Each code playbook reads its own line (`feature, refactoring`, `bug-fix`, `perf-issue`, or `hillclimb`), prose and judgment read `judgment and prose`, and trivial mechanical edits read `swarm workers`. If the rule has no `# defaults: 3` line, an older setup wrote it. Keep honoring its lines, and tell the user once per session to rerun `/setup-pstack`.
 
-- Code, prose, and judgment: `claude-opus-5-5-xhigh-fast`.
-- Trivial mechanical edits: `claude-opus-5-5-high-fast`.
-- Diverse review and design panels: one runner each on `claude-fable-5-2-high`, `claude-opus-5-5-high-fast`, and `gemini-4-carbon-high`.
+- Code, prose, and judgment: `ultra`.
+- Trivial mechanical edits: `normal`.
+- Diverse review and design panels: one runner each on `ultra`, `fusion`, and `fast-ultra`.
 
-**Fable 5.2 is an exception.** It runs outside a panel only when the user named it for this task or two Opus 5.5 xhigh runs of the same brief failed its check. Say which. Difficulty alone never qualifies.
+**The `lite` mode is an exception.** It runs only for trivial mechanical edits or when the user named it for this task. Judgment work never runs on `lite`.
 
-**Match the model to the job.** Start from the role's line or default, keep its family, and set the level the job needs. The `/setup-pstack` budget sets each role's starting level. Panel seats keep their listed level. Raise any other role one step, up to xhigh, for the hardest or subtlest work, lower it one step for judgment, and two or more steps for routine work. No role runs above xhigh. Opus 5.5 always runs its `-fast` slug. Verification always runs on the `swarm workers` model, `claude-opus-5-5-high-fast` by default. A Gemini seat never runs above `gemini-4-carbon-high`, its top slug. If the Task tool rejects a slug, never pass it again. Fall back to the role's line or default, then the calling skill's fallback, then the closest valid slug of the same family, then omit `model`. Say so.
+**Match the mode to the job.** Start from the role's line or default and move on the ladder `ultra` > `fusion` > `normal` > `fast` > `fast-ultra` > `lite`: raise one step, up to `ultra`, for the hardest or subtlest work, lower one step for judgment, and two or more for routine work. Panel seats keep their listed mode. Verification always runs on the `swarm workers` mode, `normal` by default. Devin does not expose raw model slugs or vendor choice; modes are the unit. If `devin_session_create` rejects a mode (its 400 lists the modes available to the user), never pass it again — fall back to the role's line or default, then `normal`, then omit `devin_mode` to inherit the parent. Say so.
 
-You own every subagent's work. Review the diff and write your own summary. A second opinion is the same prompt on another vendor's model.
+**Cross-platform runs are a Devin edge.** A child can target another machine type with `platform` (e.g. `windows`) or an outpost pool — use it when the task is platform-sensitive, and in the `fleet` playbook for deliberate multi-platform verification.
 
-**Fresh subagents by default.** Give a fix round, a follow-up, a retry, or the next queue item to a fresh subagent with the original brief, every later directive, and the prior agent's report and branch. Resume an existing subagent only when the work needs state that lives in it and is costly to move: its checkout, its uncommitted changes, or a process it still runs.
+**Kickoff content.** Every brief stands alone: goal, scope, repo (`repos`), output location, how to verify, what to report. A `poteto-agent` brief opens with `Read <path>/worker.md before anything else.` (see Non-negotiables) and this skill's absolute path.
+
+You own every subagent's work. Review the diff and write your own summary. A second opinion is the same prompt on a different agent mode.
+
+**Fresh subagents by default.** Give a fix round, a follow-up, a retry, or the next queue item to a fresh child session with the original brief, every later directive, and the prior child's report and branch. Resume an existing child (`devin_session_interact` message) only when the work needs state that lives in it and is costly to move: its checkout, its uncommitted changes, or a process it still runs.
 
 ## Writing the reply
 

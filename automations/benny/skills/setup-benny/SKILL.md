@@ -8,9 +8,9 @@ disable-model-invocation: true
 
 Benny ships as a dormant automation pack inside pstack. The plugin manifest exposes only pstack's normal skill root; this file and the two operational files are not slash skills.
 
-The human enters setup by pointing Cursor at the pack's `FOR_AGENTS.md`. The bootstrap flow copies the whole pack into the target repository, then reads this file directly at `.devin/automations/benny/skills/setup-benny/SKILL.md`.
+The human enters setup by pointing Devin at the pack's `FOR_AGENTS.md`. The bootstrap flow copies the whole pack into the target repository, then reads this file directly at `.devin/automations/benny/skills/setup-benny/SKILL.md`.
 
-Benny needs external configuration and two live Cursor automations.
+Benny needs external configuration and two live Devin automations.
 
 Do not create or update an automation until the user explicitly asks. Never put a secret value in plugin files, prompts, or committed configuration.
 
@@ -31,7 +31,7 @@ Merge the entire source pack into the destination:
 
 If this file is already being read from the target destination, treat the copy as complete and run the same verification before continuing.
 
-Add pstack to the target repository's `.devin/settings.json`. If the file or `.cursor` directory does not exist, create it.
+Install devin-pstack for the target repository's Devin sessions (`manage_plugin` with `plugin_url=github.com/Till3005/devin-pstack`, account scope as the user prefers).
 
 Merge this entry into the existing JSON or JSONC:
 
@@ -108,7 +108,7 @@ Ask for or confirm:
 - Polling and effort budgets
 - Model slug for triage, repro, code work, and media review
 
-Use only model slugs shown as available in the user's Cursor model picker or supported model list. Do not guess a slug and do not carry over a private default.
+Use only agent modes shown as available in the user's picker (`normal`, `fast`, `fusion`, `lite`, `ultra`, `fast-ultra`). Do not guess a mode and do not carry over a private default.
 
 The source channel, triage identity, repository, tracker adapter, control skill, and feature map must be explicit. Fail setup if any required value stays ambiguous.
 
@@ -132,7 +132,7 @@ The repro automation needs:
 - A pull request action that can open a draft pull request
 - The configured control-adapter skill
 
-Prefer configured Cursor Slack actions for reads and posts. The optional `BENNY_SLACK_BOT_TOKEN` may fill a narrow gap such as editing one operations status message or downloading an attachment. Store the value in a secret manager or environment, not in YAML.
+Prefer configured this session's Slack tools for reads and posts. The optional `BENNY_SLACK_BOT_TOKEN` may fill a narrow gap such as editing one operations status message or downloading an attachment. Store the value in a secret manager or environment, not in YAML.
 
 Do not use undocumented integration endpoints.
 
@@ -179,7 +179,7 @@ For each automation:
 2. Turn `FOR_AGENTS.md`, the finished Benny configuration, and the template intent into a complete natural-language request.
 3. Tell the live prompt to read and follow its exact committed operational file under `.devin/automations/benny/`.
 4. Use the stable repository-relative path, not a plugin source or cache path. Do not copy the operational file contents into the live prompt.
-5. Read and follow the built-in `automate` skill.
+5. Read and follow `devin_automation_manage`.
 6. Let `automate` discover Slack channels, the repository, and connected integrations.
 7. Let `automate` confirm that the copied pack and any referenced configuration files are committed in the same repository where the automation will run.
 8. Let `automate` show its draft table, obtain approval, ask readiness, and open the Automations editor.
@@ -242,7 +242,7 @@ Ask the user to update each existing automation directly in its Automations edit
 
 ### Creation boundary
 
-Never call a direct automation backend service or backend automation tool. Never use a browser URL that carries draft fields. Never build or open a Cursor protocol deep link. For new automations, the only finish path is the built-in `automate` skill's reviewed Automations editor handoff.
+Never call a direct automation backend service. The only finish path is `devin_automation_manage` `create`/`update`, which raises the approval card the user reviews before anything is saved.
 
 Do not enable either automation until the thread-safety test passes after the editor save.
 

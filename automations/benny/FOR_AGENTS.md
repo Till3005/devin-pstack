@@ -2,7 +2,7 @@
 
 ## what i want to automate
 
-i want two cursor automations that work together in one slack issue channel.
+i want two Devin automations that work together in one slack issue channel.
 
 ### automation 1: triage issue reports
 
@@ -54,7 +54,7 @@ start from [`configuration.example.yaml`](./templates/configuration.example.yaml
 
 ## for the agent
 
-the human enters setup by pointing cursor at this file. do not look for or invoke a discovered benny slash skill.
+the human enters setup by pointing Devin at this file. do not look for or invoke a discovered benny slash skill.
 
 1. ask which repository will run the automations.
 2. treat the directory containing this `FOR_AGENTS.md` as the source pack.
