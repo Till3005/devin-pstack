@@ -14,7 +14,7 @@ Every candidate gets the same prompt, so the prompt is the contract.
 
 1. State the artifact each candidate is producing.
 2. Derive the rubric, 3-6 concrete gradeable criteria for what success looks like on *this* task. It is the picker's tool in Phase D. Candidates only see the task.
-3. Pick the runners from the `arena runners` line in `~/.devin/rules/pstack-models.mdc`, by default `ultra`, `fusion`, and `fast-ultra`. An `auto` or `inherit-parent` entry is the parent's agent mode, so omit `devin_mode` for that seat. Devin does not expose model slugs or vendor choice; mode diversity is the spread you get — note that. If `devin_session_create` rejects a mode, use the nearest available mode on the ladder `ultra` > `fusion` > `normal` > `fast` > `fast-ultra` > `lite` or drop the seat, keep at least two runners, and say so. Spawn more for multiple design directions, and repeat one mode when the work is generation-bound, not judgment-sensitive.
+3. Pick the runners from the `arena runners` line in `~/.devin/rules/pstack-models.md`, by default `ultra`, `fusion`, and `fast-ultra`. An `auto` or `inherit-parent` entry is the parent's agent mode, so omit `devin_mode` for that seat. Devin does not expose model slugs or vendor choice; mode diversity is the spread you get — note that. If `devin_session_create` rejects a mode, use the nearest available mode on the ladder `ultra` > `fusion` > `normal` > `fast` > `fast-ultra` > `lite` or drop the seat, keep at least two runners, and say so. Spawn more for multiple design directions, and repeat one mode when the work is generation-bound, not judgment-sensitive.
 4. Give each candidate its own output location. A Devin child session has its own VM and checkout, so isolation is automatic; for same-VM subagents use a git worktree or `/tmp/arena-<n>/`, per the **separate-before-serializing-shared-state** principle skill.
 
 ## Phase B: Fan out
@@ -25,7 +25,7 @@ If a candidate produces no output, proceed with N-1 and note the dropout.
 
 ## Phase C: Cross-judge
 
-After all Phase B candidates settle, spawn one judge child session from the `arena cross-judge pool` line in `~/.devin/rules/pstack-models.mdc`, by default `fusion`, `normal`. Try entries in list order, preferring a mode different from the parent's. An `auto` or `inherit-parent` entry is the parent's mode and never judges. If you do not know the parent's mode, use the first real entry and say that the diversity check did not run. Devin has no vendor axis; a different mode is the available diversity. While you read in Phase D, the judge scores each candidate, by path label, on each rubric criterion and recommends a base. Give it read-only scope: have it report verdicts, not edit.
+After all Phase B candidates settle, spawn one judge child session from the `arena cross-judge pool` line in `~/.devin/rules/pstack-models.md`, by default `fusion`, `normal`. Try entries in list order, preferring a mode different from the parent's. An `auto` or `inherit-parent` entry is the parent's mode and never judges. If you do not know the parent's mode, use the first real entry and say that the diversity check did not run. Devin has no vendor axis; a different mode is the available diversity. While you read in Phase D, the judge scores each candidate, by path label, on each rubric criterion and recommends a base. Give it read-only scope: have it report verdicts, not edit.
 
 ## Phase D: Pick a base
 

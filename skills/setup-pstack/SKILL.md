@@ -5,7 +5,7 @@ description: Configure which Devin agent modes pstack uses per role. Detects the
 
 # Setup pstack
 
-Write `~/.devin/rules/pstack-models.mdc`, an always-applied rule that sets pstack's agent mode per role.
+Write `~/.devin/rules/pstack-models.md`, an always-applied rule that sets pstack's agent mode per role.
 
 ## Steps
 
@@ -17,7 +17,7 @@ Devin does not expose raw model slugs or vendor choice. Agent modes are the unit
 
 ### 2. Load current state
 
-The default role-to-mode mapping is the rule shape shown in step 5 below. If `~/.devin/rules/pstack-models.mdc` already exists, read it and treat its `# budget` line and its role values as the current choices. Otherwise start from those defaults. A line whose role is not in step 5, such as `hardest tasks`, `architect runners`, `reflect tooling`, or `why investigators`, is from a retired role. Drop it.
+The default role-to-mode mapping is the rule shape shown in step 5 below. If `~/.devin/rules/pstack-models.md` already exists, read it and treat its `# budget` line and its role values as the current choices. Otherwise start from those defaults. A line whose role is not in step 5, such as `hardest tasks`, `architect runners`, `reflect tooling`, or `why investigators`, is from a retired role. Drop it.
 
 A value that is a raw model slug (anything matching `claude-*`, `gemini-*`, `gpt-*`, `grok-*`, or containing a `-high`/`-xhigh`/`-medium`/`-low` token) comes from a Cursor-era rule. Map it by effort before step 3: `xhigh` → `ultra`, `high` → `normal`, `medium` → `fast`, `low` or unmapped → `lite`. In a panel role, each slug maps independently. Tell the user which values you migrated.
 
@@ -41,7 +41,7 @@ Every real mode written must be in the detected set. `inherit-parent` and `auto`
 
 ### 5. Write the rule
 
-Write `~/.devin/rules/pstack-models.mdc` with `alwaysApply: true`, the `# defaults: 3` line, a `# budget` line with the chosen label and the mode that label names, and one line per role, using the same labels poteto-mode uses. Overwrite the whole file so re-runs stay idempotent. Shape:
+Write `~/.devin/rules/pstack-models.md` with `alwaysApply: true`, the `# defaults: 3` line, a `# budget` line with the chosen label and the mode that label names, and one line per role, using the same labels poteto-mode uses. Overwrite the whole file so re-runs stay idempotent. Shape:
 
 ```
 ---
