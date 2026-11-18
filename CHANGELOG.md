@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.15.44+devin.4]
+
+### Fixed
+- **Critical**: removed `disable-model-invocation: true` from all 57 skill manifests. On Cursor this made skills user-invocable only; on Devin it makes them unreachable entirely (not invocable by the model OR by name). Verified live: after install only 4 of 61 skills were callable. Name-mention invocation (`/swarm`, "use interrogate") is Devin's equivalent of Cursor's slash commands, so all skills must remain invocable.
+
+
 All notable changes to this port. Versioning follows upstream pstack; port revisions are marked with `+devin.N`.
 
 ## [0.15.43+devin.3]
