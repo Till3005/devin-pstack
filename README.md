@@ -11,7 +11,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license">
-  <img src="https://img.shields.io/badge/skills-64-orange" alt="64 skills">
+  <img src="https://img.shields.io/badge/skills-61%2B3-orange" alt="61 core skills + 3 benny skills">
   <img src="https://img.shields.io/badge/platform-Devin%20Desktop-6f42c1" alt="Devin Desktop">
   <img src="https://img.shields.io/badge/upstream-pstack%20(Cursor)-green" alt="Upstream: pstack for Cursor">
   <img src="https://img.shields.io/badge/status-actively%20ported-brightgreen" alt="Status">
@@ -74,7 +74,7 @@ Then once, in a session:
 
 ## What's inside
 
-**64 skills**, grouped by what they do for you:
+**64 skills total** — 61 core skills in `skills/`, plus 3 bundled in the benny automation pack — grouped by what they do for you:
 
 <details open>
 <summary><b>Orchestration & fan-out</b> — run many agents, one answer</summary>
@@ -143,7 +143,7 @@ Each is a skill that fires at the moment its judgment applies — e.g. `laziness
 
 **Agents** — briefs for embedding in child-session prompts: `agents/poteto-agent.md`, `agents/comment-sicko.md`.
 
-**Automations** — `automations/benny/`: a Slack bug-triage + reproduce-and-fix pack ported to `devin_automation_manage`. Copy the pack into a target repo to use it.
+**Automations** — `automations/benny/`: a Slack bug-triage + reproduce-and-fix pack ported to `devin_automation_manage`, with its own 3 skills (`setup-benny`, `triage-issue-reports`, `reproduce-and-fix-issues`). Copy the pack into a target repo to use it.
 
 **Docs** — start here:
 
@@ -165,7 +165,7 @@ Each is a skill that fires at the moment its judgment applies — e.g. `laziness
 ```text
 plugin.json                 # Devin plugin manifest (agent-plugins.org schema)
 .cursor-plugin/             # Upstream pstack manifest, kept for provenance
-skills/                     # 64 skills (poteto-mode, swarm, principles, ...)
+skills/                     # 61 core skills (poteto-mode, swarm, principles, ...)
   poteto-mode/playbooks/    # shipping, babysit, autopilot, fleet, ...
 agents/                     # poteto-agent, comment-sicko
 automations/benny/          # Slack triage + reproduce-and-fix automation pack
