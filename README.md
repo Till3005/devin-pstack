@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/cover.png" alt="devin-pstack — pstack engineering skills, deeply ported to Devin" width="840">
+  <img src="assets/logo.png" width="180" alt="devin-pstack — an otter eating a sweet potato">
 </p>
 
 <h1 align="center">devin-pstack</h1>
