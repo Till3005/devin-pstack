@@ -37,3 +37,11 @@ All notable changes to this port. Versioning follows upstream pstack; port revis
 - Initial deep port of [pstack](https://github.com/cursor/plugins/tree/main/pstack) v0.15.43 to Devin.
 - `plugin.json` (agent-plugins.org schema), MIT license retained, upstream attribution.
 - 61 skills, 2 agent briefs, benny automation pack, 10-part guide.
+
+## [1.0.0]
+
+Release-ready. Version resets from the upstream-tracking scheme (`0.15.44+devin.N`); the port base remains pstack 0.15.44, noted here for future upstream syncs.
+
+### Fixed
+- `worktree-audit.sh` dropped the dead `~/.cursor` transcript fallback (pure Devin port; `.devin` path is the only location).
+- `statechart` script package renamed `@cursor-skill/*` → `@devin-pstack/statechart`.

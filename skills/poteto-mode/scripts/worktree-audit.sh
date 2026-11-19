@@ -70,7 +70,6 @@ fi
 # LAST_CHAT column stays '-' and every worktree still gets a bucket.
 slug=$(printf '%s' "$main_wt" | sed 's#^/##; s#/#-#g')
 transcripts="$HOME/.devin/projects/$slug/agent-transcripts"
-[ -d "$transcripts" ] || transcripts="$HOME/.cursor/projects/$slug/agent-transcripts"
 now=$(date +%s)
 
 echo "# base: $base"
